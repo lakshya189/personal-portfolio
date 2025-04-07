@@ -1,0 +1,104 @@
+  /* HEADER container */
+  .header {
+    background-color: #b8d4da; /* अपनी पसंद का रंग चुनें */
+    position: sticky;   /* स्क्रॉल पर टॉप पर चिपका रहेगा */
+    top: 0;
+    z-index: 50;        /* ऊपर रखने के लिए */
+  }
+
+  /* NAV wrapper */
+  .nav {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* LOGO styling */
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .logo-purple {
+    color: #8B5CF6; /* पर्पल */
+  }
+
+  /* HAMBURGER icon (default hidden on desktop) */
+  .menu-icon {
+    z-index: 100;
+    display: none;       /* मोबाइल में दिखाएँगे */
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: auto;
+    margin-top: -28px;
+  }
+
+  /* NAV links (desktop default) */
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 1rem;
+    margin: 0;  /* default reset */
+  }
+
+  .nav-links li {
+    margin: 0;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: #2D2D2D; /* Dark text color */
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover {
+    color: #8B5CF6; /* Hover color */
+  }
+
+  /* DOWNLOAD CV button style */
+  .cv-button {
+    background-color: #8B5CF6;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    transition: background-color 0.3s;
+  }
+
+  .cv-button:hover {
+    background-color: #6D28D9; /* Darker purple on hover */
+  }
+
+  /* MEDIA QUERY for MOBILE */
+  @media (max-width: 768px) {
+    /* Hamburger icon appears on mobile */
+    .menu-icon {
+      display: block;
+    }
+
+    /* By default, hide nav-links on mobile (use transform) */
+    .nav-links {
+      position: absolute;
+      top: 60px; /* नीचे logo/nav bar से थोड़ा नीचे */
+      right: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 200px;
+      background-color: #b8d4da;
+      transform: translateX(100%); /* hidden off-screen */
+      transition: transform 0.3s ease;
+      padding: 1rem;
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+      box-shadow: -2px 2px 8px rgba(0,0,0,0.15);
+    }
+
+    /* When "active" class is added, nav slides in */
+    .nav-links.active {
+      top: 75px ;
+      transform: translateX(0);
+    }
+  }

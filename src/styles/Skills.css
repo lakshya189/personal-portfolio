@@ -1,0 +1,130 @@
+.skills {
+  padding: 4rem 2rem;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.skills h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1f1f1f;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.skills > p {
+  font-size: 1rem;
+  color: #4b5563;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Two-column layout */
+.skills-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3rem;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+}
+
+/* Radar Chart */
+.skills-chart {
+  width: 100%;
+  max-width: 400px;
+  height: 400px;
+  flex: 1;
+}
+
+/* Bars & Tools */
+.skills-details {
+  flex: 1;
+  max-width: 600px;
+  text-align: left;
+}
+
+.skills-details .bar-container {
+  margin-bottom: 1.5rem;
+}
+
+.skills-details .bar-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.skills-details .bar-header span {
+  font-weight: 600;
+  color: #111827;
+  font-size: 1rem;
+}
+
+.skills-details .progress-bg {
+  height: 0.5rem;
+  background-color: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.skills-details .progress-fill {
+  height: 100%;
+  background-color: #9333ea;
+  transition: all 1s ease-in-out;
+  border-radius: 999px;
+}
+
+/* Tools & Tech */
+.skills-details .tools {
+  margin-top: 3rem;
+}
+
+.skills-details .tools h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.skills-details .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.skills-details .tags span {
+  background-color: #f3f4f6;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  transition: 0.3s;
+}
+
+.skills-details .tags span:hover {
+  background-color: #ede9fe;
+  color: #9333ea;
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .skills-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .skills-details {
+    text-align: center;
+  }
+
+  .skills-details .bar-header {
+    justify-content: center;
+    gap: 1rem;
+  }
+}

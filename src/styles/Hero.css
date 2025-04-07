@@ -1,0 +1,229 @@
+/* Hero Section Wrapper */
+.hero-section {
+  position: relative;
+  min-height: 100vh; /* Tailwind का 'min-h-screen' */
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  font-family: sans-serif;
+}
+
+/* Background Container (Absolute) */
+.hero-bg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.hero-bg-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Dark gradient overlay (left -> right) */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
+}
+
+/* Main Content Container */
+.hero-content-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1200px; /* Tailwind में container mx-auto जैसा */
+  margin: 0 auto;
+  padding: 0 1.5rem; /* px-6 */
+}
+
+/* Grid: single col on mobile, 2 cols on md+ */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem; /* gap-12 => ~3rem */
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Fade Up Animation */
+.fade-up {
+  transform: translateY(10px);
+  opacity: 0;
+  transition: all 1s ease;
+}
+
+.fade-up.loaded {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.fade-up.delay-300 {
+  transition-delay: 0.3s;
+}
+
+/* Title/H1 */
+.hero-title {
+  font-weight: 700; /* font-bold */
+  line-height: 1.2;
+  margin-bottom: 1.5rem; /* mb-6 */
+  color: #fff;
+  font-size: 2.5rem; /* ~ text-4xl */
+}
+
+@media (min-width: 768px) {
+  .hero-title {
+    font-size: 3rem; /* md:text-5xl */
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-title {
+    font-size: 3.75rem; /* lg:text-6xl */
+  }
+}
+
+/* Purple highlight (Lakshya Soni) */
+.text-purple {
+  color: #a855f7; /* Tailwind purple-500 => #a855f7 or #8b5cf6 */
+}
+
+/* Gradient text for "Full Stack Developer" */
+.gradient-text {
+  background: linear-gradient(to right, #9333EA, #4F46E5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Paragraph */
+.hero-paragraph {
+  font-size: 1.125rem; /* text-lg => 1.125rem */
+  color: #d1d5db;      /* text-gray-300 */
+  margin-bottom: 2rem; /* mb-8 */
+  max-width: 32rem;    /* max-w-lg => 32rem */
+}
+
+@media (min-width: 768px) {
+  .hero-paragraph {
+    font-size: 1.25rem; /* md:text-xl => 1.25rem */
+  }
+}
+
+/* Buttons container */
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap; /* ताकि एक row में न समाए तो wrap हो जाए */
+  gap: 1rem;
+}
+
+/* Primary Button (View My Work) */
+.btn-primary {
+  background-color: #9333ea; /* purple-600 => #9333ea */
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px; /* बहुत गोल */
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: #7e22ce; /* purple-700 => #7e22ce */
+}
+
+/* Outline Button (Contact Me) */
+.btn-outline {
+  border: 2px solid #8b5cf6;  /* purple-500 => #8b5cf6 */
+  color: #a78bfa; /* purple-400 => #a78bfa */
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-outline:hover {
+  background-color: #9333ea;
+  color: #fff;
+}
+
+/* Right-side profile container */
+.profile-pic {
+  border-radius: 1rem; /* rounded-2xl => 1rem */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* shadow-2xl approx */
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Floating circles (pulse animation) */
+.floating-circle {
+  position: absolute;
+  border-radius: 9999px;
+  opacity: 0.7;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+}
+
+/* Bouncing Arrow at bottom */
+.bounce-arrow {
+  position: absolute;
+  bottom: 2.5rem; /* ~bottom-10 => 2.5rem */
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -10px);
+  }
+}
+
+.bounce-arrow a {
+  color: #d1d5db; /* text-gray-300 */
+  font-size: 1.5rem; /* text-2xl => 1.5rem */
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+
+.bounce-arrow a:hover {
+  color: #8b5cf6; /* text-purple-500 => #8b5cf6 */
+}
