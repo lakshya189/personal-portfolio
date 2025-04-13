@@ -64,19 +64,6 @@
   letter-spacing: 0.5px;
 }
 
-.skills h2::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(90deg, #9333EA, #4F46E5);
-  border-radius: 2px;
-  box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
-}
-
 .skills > p {
   font-size: 1.1rem;
   color: #ffffff;

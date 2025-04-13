@@ -1,8 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, Suspense } from "react";
 import { useInView } from 'react-intersection-observer';
+import { motion } from 'framer-motion';
 import "../styles/Hero.css";
 import Spline from '@splinetool/react-spline';
 import * as THREE from 'three';
+
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { ref, inView } = useInView({ triggerOnce: true });
@@ -76,7 +78,7 @@ const Hero = () => {
   }, [isMobile, mousePosition]);
 
   const onSplineLoad = (spline) => {
-    console.log("🔄 Spline object received:", spline);
+    console.log(" Spline object received:", spline);
 
     // Use a short delay to ensure runtime is initialized
     setTimeout(() => {
@@ -89,13 +91,13 @@ const Hero = () => {
       try {
         const renderer = spline.runtime.renderer;
         const scene = spline.runtime.scene;
-        // ⚙️ Optimizations
+        // Optimizations
         renderer.antialias = false; // Turn off antialias for performance
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Lower pixel ratio
         renderer.toneMapping = THREE.NoToneMapping; // Disable tone mapping
         renderer.shadowMap.enabled = false; // Turn off shadows
 
-        // 🔁 Disable auto rendering and trigger manually on user interaction
+        // Disable auto rendering and trigger manually on user interaction
         spline.runtime.setAutoRender(false);
 
         const triggerRender = () => spline.runtime.render();
@@ -120,7 +122,6 @@ const Hero = () => {
     }, 300);
   };
 
-
   // Simplified animation sequence
   useEffect(() => {
     // Start animations immediately
@@ -139,8 +140,21 @@ const Hero = () => {
     }
   };
 
+  function onMouseMove(e) {
+    if (window.splineApp) {
+      const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      const mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+      window.splineApp.setVariable('mouseX', mouseX);
+      window.splineApp.setVariable('mouseY', mouseY);
+    }
+  }
+
+  function onLoad(spline) {
+    window.splineApp = spline;
+  }
+
   return (
-    <section className="hero-section" id="hero">
+    <section className="hero-section" id="hero" onMouseMove={onMouseMove}>
       {/* Background Container */}
       <div className="hero-bg-container">
         {/* Enhanced cosmic background - always visible */}
@@ -322,16 +336,18 @@ const Hero = () => {
             }}
             className="spline-container"
           >
-            <Spline
-              scene="https://prod.spline.design/4OFhTGnFW93BPBFI/scene.splinecode"
-              onLoad={onSplineLoad}
-              style={{
-                width: '140%',
-                height: '100%',
-                transform: isMobile ? 'scale(0.8)' : 'none', // Scale down on mobile for better performance
-              }}
-              className="spline-scene"
-            />
+            <Suspense fallback={<div className="loading">Loading 3D Model...</div>}>
+              <Spline
+                scene="https://prod.spline.design/qVPr1YWo39OHYoZ8/scene.splinecode"
+                onLoad={onSplineLoad}
+                style={{
+                  width: '140%',
+                  height: '100%',
+                  transform: isMobile ? 'scale(0.8)' : 'none', // Scale down on mobile for better performance
+                }}
+                className="spline-scene"
+              />
+            </Suspense>
           </div>
         )}
 

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/LoadingScreen.css';
 
-const LoadingScreen = ({ setLoading }) => {
+const LoadingScreen: React.FC = () => {
   const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -18,7 +19,9 @@ const LoadingScreen = ({ setLoading }) => {
     }, 10); // Faster loading speed
 
     return () => clearTimeout(timer);
-  }, [progress, setLoading]);
+  }, [progress]);
+
+  if (!loading) return null;
 
   return (
     <div className="loading-screen">
