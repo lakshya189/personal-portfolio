@@ -1,5 +1,7 @@
 import React from "react";
 import '../styles/Testimonials.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuoteLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const Testimonials = () => {
   const scrollToSection = (id) => {
@@ -40,20 +42,16 @@ const Testimonials = () => {
   ];
 
   return (
-    <section className="testimonials-section">
-      {/* Heading */}
-      <div className="testimonials-heading">
-        <h2>Client Testimonials</h2>
-        <div className="heading-underline"></div>
-        <p>Here's what some of my clients have to say about working with me.</p>
-      </div>
+    <section id="testimonials" className="testimonials">
+      <h2>Client Testimonials</h2>
+      <p>Here's what some of my clients have to say about working with me.</p>
 
       {/* Testimonial Cards */}
       <div className="testimonials-grid">
         {testimonials.map((testimonial, index) => (
           <div className="testimonial-card" key={index}>
             <div className="quote-icon">
-              <i className="fas fa-quote-left"></i>
+              <FontAwesomeIcon icon={faQuoteLeft} style={{ display: 'block' }} />
             </div>
             <p>"{testimonial.quote}"</p>
             <div className="testimonial-footer">
@@ -61,7 +59,7 @@ const Testimonials = () => {
               <div>
                 <h4 className="name">{testimonial.name}</h4>
                 <p className="position">
-                  {testimonial.position}, {testimonial.company}
+                  {testimonial.position} <span style={{ margin: '0 4px' }}>•</span> {testimonial.company}
                 </p>
               </div>
             </div>
@@ -69,12 +67,36 @@ const Testimonials = () => {
         ))}
       </div>
 
+      {/* Floating particles for decoration */}
+      {[...Array(5)].map((_, i) => {
+        const size = Math.random() * 6 + 2;
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 5;
+
+        return (
+          <div
+            key={`particle-${i}`}
+            className="floating-particle"
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              top: `${top}%`,
+              left: `${left}%`,
+              animationDuration: `${duration}s`,
+              animationDelay: `${delay}s`
+            }}
+          />
+        );
+      })}
+
       {/* CTA Section */}
       <div className="cta-section">
         <div className="cta-grid">
           <div className="cta-content">
             <h3>Ready to start your project?</h3>
-            <p>
+            <p id="ttt">
               Let's collaborate to bring your ideas to life with creative
               solutions and cutting-edge technology.
             </p>
@@ -82,7 +104,9 @@ const Testimonials = () => {
               onClick={() => scrollToSection("contact")}
               className="cta-button"
             >
-              Get in Touch <i className="fas fa-arrow-right"></i>
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                Get in Touch <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '10px' }} />
+              </span>
             </button>
           </div>
           <div className="cta-image">

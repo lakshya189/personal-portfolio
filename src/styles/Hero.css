@@ -1,12 +1,14 @@
 /* Hero Section Wrapper */
 .hero-section {
   position: relative;
-  min-height: 100vh; /* Tailwind का 'min-h-screen' */
+  min-height: 100vh;
   display: flex;
   align-items: center;
   overflow: hidden;
-  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  background: linear-gradient(135deg, #0f0c29 0%, #0d0a28 50%, #020253 100%);
   font-family: sans-serif;
+  will-change: transform;
+  perspective: 1000px;
 }
 
 /* Background Container (Absolute) */
@@ -17,13 +19,568 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  transform-style: preserve-3d;
 }
 
-.hero-bg-container img {
+/* Starry background - always visible */
+.simple-background {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top;
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  z-index: 1;
+  animation: gradientAnimation 15s ease infinite;
+  background-size: 400% 400%;
+  position: relative;
+}
+
+/* Stars container */
+.stars-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 2;
+  perspective: 500px;
+}
+
+/* Multiple star layers for parallax effect */
+.stars-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateZ(var(--layer-depth));
+}
+
+/* Stars animation */
+.stars {
+  position: absolute;
+  width: var(--star-size);
+  height: var(--star-size);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, var(--star-opacity));
+  box-shadow: 0 0 var(--glow-size) var(--glow-color);
+  animation: twinkle var(--twinkle-duration) ease-in-out infinite;
+  opacity: var(--star-opacity);
+  filter: blur(var(--blur-amount));
+}
+
+/* Colored stars */
+.stars.colored {
+  background-color: var(--star-color);
+  box-shadow: 0 0 var(--glow-size) var(--star-color);
+}
+
+/* Nebula effects */
+.nebula {
+  position: absolute;
+  width: var(--nebula-size);
+  height: var(--nebula-size);
+  border-radius: 50%;
+  background: radial-gradient(circle at center, var(--nebula-color-inner) 0%, var(--nebula-color-outer) 70%, transparent 100%);
+  opacity: var(--nebula-opacity);
+  filter: blur(var(--nebula-blur));
+  mix-blend-mode: screen;
+  animation: pulse-nebula var(--nebula-duration) ease-in-out infinite alternate;
+  transform: rotate(var(--nebula-rotation));
+}
+
+@keyframes pulse-nebula {
+  0% {
+    opacity: var(--nebula-opacity);
+    transform: scale(1) rotate(var(--nebula-rotation));
+  }
+  100% {
+    opacity: calc(var(--nebula-opacity) * 0.7);
+    transform: scale(1.1) rotate(calc(var(--nebula-rotation) + 5deg));
+  }
+}
+
+/* Shooting stars */
+.shooting-star {
+  position: absolute;
+  width: var(--shooting-length);
+  height: var(--shooting-width);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 1));
+  transform: rotate(var(--rotation));
+  top: var(--top);
+  left: var(--left);
+  opacity: 0;
+  animation: shooting var(--shooting-duration) linear infinite;
+  animation-delay: var(--delay);
+  z-index: 2;
+  filter: blur(0.5px);
+}
+
+.shooting-star::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: calc(var(--shooting-width) / -2);
+  width: calc(var(--shooting-width) * 2);
+  height: calc(var(--shooting-width) * 2);
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 20px 2px white, 0 0 30px 5px rgba(147, 51, 234, 0.3);
+}
+
+/* Cosmic dust particles */
+.cosmic-dust {
+  position: absolute;
+  width: var(--dust-size);
+  height: var(--dust-size);
+  background-color: rgba(255, 255, 255, var(--dust-opacity));
+  border-radius: 50%;
+  filter: blur(var(--dust-blur));
+  animation: float-dust var(--dust-duration) linear infinite;
+  opacity: var(--dust-opacity);
+  transform: translateZ(var(--dust-depth));
+}
+
+@keyframes float-dust {
+  0% {
+    transform: translate(0, 0) translateZ(var(--dust-depth));
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--dust-opacity);
+  }
+  90% {
+    opacity: var(--dust-opacity);
+  }
+  100% {
+    transform: translate(var(--dust-x), var(--dust-y)) translateZ(var(--dust-depth));
+    opacity: 0;
+  }
+}
+
+@keyframes shooting {
+  0% {
+    opacity: 0;
+    transform: translateX(0) rotate(var(--rotation));
+  }
+  5% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0;
+    transform: translateX(var(--distance)) rotate(var(--rotation));
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(var(--distance)) rotate(var(--rotation));
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: var(--star-opacity);
+    transform: scale(1);
+    box-shadow: 0 0 var(--glow-size) var(--glow-color);
+  }
+  50% {
+    opacity: calc(var(--star-opacity) * 0.3);
+    transform: scale(0.7);
+    box-shadow: 0 0 calc(var(--glow-size) * 0.5) var(--glow-color);
+  }
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Dark gradient overlay with cosmic effect */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%);
+  z-index: 10; /* Above the simple background and Spline */
+  pointer-events: none; /* Allow clicking through */
+  mix-blend-mode: multiply; /* Better blending with the background */
+  opacity: 0.8;
+}
+
+/* Add nebula effect */
+.overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, rgba(147, 51, 234, 0.1) 0%, rgba(79, 70, 229, 0.05) 50%, transparent 70%);
+  opacity: 0.5;
+  filter: blur(40px);
+  mix-blend-mode: screen;
+}
+
+/* Spline container with 3D effect */
+.spline-container {
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transform: translate(0, 0); /* Reset transform for mobile */
+  z-index: 5; /* Above the simple background but below the overlay */
+  pointer-events: none; /* Prevent interaction with Spline for better performance */
+  filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.2));
+}
+
+/* Spline loading indicator */
+.spline-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(15, 12, 41, 0.7);
+  z-index: 5;
+  color: white;
+}
+
+/* Spline scene with cosmic glow effect */
+.spline-scene {
+  width: 100%;
+  height: 100%;
+  filter: blur(0.5px); /* Very slight blur for better text contrast */
+  opacity: 0.9; /* Higher opacity for better visibility */
+  transform-origin: center center;
+  will-change: transform; /* Optimize for GPU acceleration */
+  transition: opacity 0.8s ease, transform 0.5s ease; /* Smooth transitions */
+  animation: subtle-float 8s ease-in-out infinite alternate;
+}
+
+@keyframes subtle-float {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(-10px) scale(1.02);
+  }
+}
+
+/* Cosmic loading indicator */
+.spline-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  background: rgba(15, 12, 41, 0.7);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(147, 51, 234, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(147, 51, 234, 0.2);
+}
+
+/* Fallback for Suspense */
+.spline-loading-fallback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+  background-color: rgba(15, 12, 41, 0.7);
+  padding: 1.5rem 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(147, 51, 234, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(147, 51, 234, 0.2);
+  animation: pulse-glow 2s infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 40px rgba(147, 51, 234, 0.5);
+  }
+}
+
+.spline-loading p {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #d1d5db;
+  text-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+  letter-spacing: 1px;
+  animation: pulse-text 2s infinite alternate;
+}
+
+@keyframes pulse-text {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Cosmic spinner */
+.spline-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: #9333ea;
+  border-left-color: #4F46E5;
+  border-right-color: #9333ea;
+  animation: cosmic-spin 1.5s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.3), inset 0 0 10px rgba(147, 51, 234, 0.2);
+}
+
+@keyframes cosmic-spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.3), inset 0 0 10px rgba(147, 51, 234, 0.2);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+    box-shadow: 0 0 30px rgba(147, 51, 234, 0.5), inset 0 0 15px rgba(147, 51, 234, 0.3);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.3), inset 0 0 10px rgba(147, 51, 234, 0.2);
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .hero-section {
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  }
+
+  .hero-content-container {
+    padding: 0 1rem;
+    z-index: 50; /* Ensure it's above everything */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding-top: 3rem;
+    position: relative; /* Ensure z-index works */
+  }
+
+  .hero-grid {
+    gap: 1.5rem;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* Simplified text styles for mobile */
+  .hero-title {
+    font-size: 2rem !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1rem;
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .greeting {
+    font-size: 1.3rem !important;
+    color: #f0f0f0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    margin-bottom: 0.5rem;
+    animation: fadeIn 0.5s forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .title-separator {
+    width: 60px;
+    height: 4px;
+    margin: 1rem auto;
+    background: linear-gradient(90deg, #9333EA, #4F46E5);
+  }
+
+  .text-purple {
+    color: #b975ff;
+    position: relative;
+    display: inline-block;
+    padding: 0.25rem 0;
+    font-size: 1.6rem !important;
+  }
+
+  .gradient-text {
+    background: linear-gradient(90deg, #b975ff, #ffffff);
+    font-size: 1.2rem !important;
+    padding: 0.3rem 0;
+    font-weight: 700;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+  }
+
+  .hero-paragraph {
+    font-size: 1rem !important;
+    line-height: 1.6;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+    max-width: 250px;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #9333EA, #4F46E5);
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-outline {
+    width: 100%;
+    max-width: 250px;
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    margin: 0 auto;
+    background: transparent;
+    color: #a855f7;
+    border: 2px solid #9333EA;
+    border-radius: 9999px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-primary:active, .btn-outline:active {
+    transform: translateY(2px);
+  }
+
+  /* Simplified overlay */
+  .overlay {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+    z-index: 5;
+  }
+
+  /* Add a subtle vignette effect */
+  .hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.3) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Cosmic glass container for better performance */
+  .text-container {
+    background-color: rgba(15, 12, 41, 0.6);
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(147, 51, 234, 0.2);
+    margin: 0 auto;
+    max-width: 95%;
+    position: relative;
+    opacity: 1;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(147, 51, 234, 0.1);
+    overflow: hidden;
+  }
+
+  /* Cosmic glow effect */
+  .text-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at center, rgba(147, 51, 234, 0.1) 0%, rgba(79, 70, 229, 0.05) 30%, transparent 70%);
+    opacity: 0.5;
+    z-index: -1;
+    animation: rotate-gradient 15s linear infinite;
+    pointer-events: none;
+  }
+
+  /* Fix for Spline container on mobile */
+  .spline-container {
+    margin-left: -10%;
+    width: 130% !important;
+    height: 100% !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Optimize Spline rendering on mobile */
+  .spline-scene {
+    transform: scale(0.9) !important; /* Increased from 0.7 for better visibility */
+    transform-origin: center center;
+    opacity: 0.6 !important;
+    filter: blur(1px);
+    /* Center the scene */
+    position: relative;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensure content is contained within bounds */
+  }
+
+  /* Add this new class for better containment */
+  .spline-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
 }
 
 /* Dark gradient overlay (left -> right) */
@@ -34,23 +591,26 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Main Content Container */
 .hero-content-container {
   position: relative;
-  z-index: 10;
+  z-index: 50; /* Ensure it's above everything */
   width: 100%;
-  max-width: 1200px; /* Tailwind में container mx-auto जैसा */
+  max-width: 1800px;
   margin: 0 auto;
-  padding: 0 1.5rem; /* px-6 */
+  padding: 0 1.5rem;
+  pointer-events: auto;
 }
 
 /* Grid: single col on mobile, 2 cols on md+ */
 .hero-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 3rem; /* gap-12 => ~3rem */
+  gap: 3rem;
   align-items: center;
 }
 
@@ -60,170 +620,283 @@
   }
 }
 
-/* Fade Up Animation */
-.fade-up {
-  transform: translateY(10px);
+/* Simplified animation classes */
+.animate-item {
   opacity: 0;
-  transition: all 1s ease;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
 }
 
-.fade-up.loaded {
-  transform: translateY(0);
-  opacity: 1;
+.text-animation-started .animate-item {
+  animation-name: fadeIn;
+  animation-delay: var(--item-delay, 0s);
 }
 
-.fade-up.delay-300 {
-  transition-delay: 0.3s;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Apply simplified font globally */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+}
+
+/* Hero Title Link Effect - simplified */
+.hero-title a {
+  position: relative;
+  display: inline-block;
+  padding: 4px 0;
+  text-decoration: none;
+  color: inherit;
 }
 
 /* Title/H1 */
 .hero-title {
-  font-weight: 700; /* font-bold */
+  font-weight: 700;
   line-height: 1.2;
-  margin-bottom: 1.5rem; /* mb-6 */
+  margin-bottom: 1.5rem;
   color: #fff;
-  font-size: 2.5rem; /* ~ text-4xl */
+  font-size: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Greeting style */
+.greeting {
+  font-weight: 500;
+  color: #f0f0f0;
+  margin-bottom: 0.5rem;
+  display: block;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Title separator */
+.title-separator {
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #9333EA, #4F46E5);
+  margin: 1rem auto;
+  border-radius: 2px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
 }
 
 @media (min-width: 768px) {
   .hero-title {
-    font-size: 3rem; /* md:text-5xl */
+    font-size: 2.75rem;
   }
 }
 
 @media (min-width: 1024px) {
   .hero-title {
-    font-size: 3.75rem; /* lg:text-6xl */
+    font-size: 2.5rem;
   }
 }
 
-/* Purple highlight (Lakshya Soni) */
+/* Purple highlight (Lakshya Soni) - simplified */
 .text-purple {
-  color: #a855f7; /* Tailwind purple-500 => #a855f7 or #8b5cf6 */
+  color: #b975ff;
+  transition: color 0.3s ease;
+  display: inline-block;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  font-weight: 700;
 }
 
-/* Gradient text for "Full Stack Developer" */
+/* Gradient text for "Full Stack Developer" - simplified */
 .gradient-text {
-  background: linear-gradient(to right, #9333EA, #4F46E5);
+  background: linear-gradient(90deg, #b975ff, #ffffff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 /* Paragraph */
 .hero-paragraph {
-  font-size: 1.125rem; /* text-lg => 1.125rem */
-  color: #d1d5db;      /* text-gray-300 */
-  margin-bottom: 2rem; /* mb-8 */
-  max-width: 32rem;    /* max-w-lg => 32rem */
+  font-size: 1.125rem;
+  color: #f8fafc;
+  margin-bottom: 2rem;
+  max-width: 32rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  line-height: 1.6;
+  font-weight: 400;
 }
 
 @media (min-width: 768px) {
   .hero-paragraph {
-    font-size: 1.25rem; /* md:text-xl => 1.25rem */
+    font-size: 1.2rem;
   }
 }
 
 /* Buttons container */
 .hero-buttons {
   display: flex;
-  flex-wrap: wrap; /* ताकि एक row में न समाए तो wrap हो जाए */
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
-/* Primary Button (View My Work) */
+/* Cosmic Primary Button (View My Work) */
 .btn-primary {
-  background-color: #9333ea; /* purple-600 => #9333ea */
+  background: linear-gradient(135deg, #9333EA, #4F46E5);
   color: #fff;
-  padding: 0.75rem 2rem;
-  border-radius: 9999px; /* बहुत गोल */
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px; /* Fully rounded */
+  transition: all 0.3s ease;
   border: none;
   cursor: pointer;
-  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3), 0 0 30px rgba(147, 51, 234, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(5px);
+}
+
+/* Cosmic shine effect */
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.7s ease;
+  z-index: 1;
+}
+
+/* Star particles effect */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(circle, white 1px, transparent 1px);
+  background-size: 15px 15px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .btn-primary:hover {
-  background-color: #7e22ce; /* purple-700 => #7e22ce */
+  background: linear-gradient(135deg, #7E22CE, #4338CA);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(147, 51, 234, 0.5), 0 0 40px rgba(147, 51, 234, 0.3);
 }
 
-/* Outline Button (Contact Me) */
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+.btn-primary:hover::after {
+  opacity: 0.1;
+  animation: rotate-stars 10s linear infinite;
+}
+
+@keyframes rotate-stars {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Cosmic Outline Button (Contact Me) */
 .btn-outline {
-  border: 2px solid #8b5cf6;  /* purple-500 => #8b5cf6 */
-  color: #a78bfa; /* purple-400 => #a78bfa */
-  padding: 0.75rem 2rem;
-  border-radius: 9999px;
+  background-color: transparent;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px; /* Fully rounded */
+  border: 2px solid rgba(147, 51, 234, 0.7);
   transition: all 0.3s ease;
-  background: transparent;
   cursor: pointer;
-  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 0 20px rgba(147, 51, 234, 0.1);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+}
+
+/* Cosmic fill effect */
+.btn-outline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #9333EA, #4F46E5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+/* Cosmic glow effect */
+.btn-outline::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #9333EA, #4F46E5, #9333EA);
+  z-index: -2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .btn-outline:hover {
-  background-color: #9333ea;
   color: #fff;
+  border-color: transparent;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(147, 51, 234, 0.3), 0 0 30px rgba(147, 51, 234, 0.2);
 }
 
-/* Right-side profile container */
-.profile-pic {
-  border-radius: 1rem; /* rounded-2xl => 1rem */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* shadow-2xl approx */
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  object-position: top;
+.btn-outline:hover::before {
+  opacity: 1;
 }
 
-/* Floating circles (pulse animation) */
-.floating-circle {
-  position: absolute;
-  border-radius: 9999px;
-  opacity: 0.7;
-  animation: pulse 2s infinite;
+.btn-outline:hover::after {
+  opacity: 0.5;
+  animation: border-flow 2s linear infinite;
 }
 
-@keyframes pulse {
+@keyframes border-flow {
   0% {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.5;
+    background-position: 0% 50%;
   }
   100% {
-    transform: scale(1);
-    opacity: 0.7;
+    background-position: 200% 50%;
   }
 }
 
-/* Bouncing Arrow at bottom */
+/* Arrow at bottom - simplified */
 .bounce-arrow {
   position: absolute;
-  bottom: 2.5rem; /* ~bottom-10 => 2.5rem */
+  bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translate(-50%, 0);
-  }
-  50% {
-    transform: translate(-50%, -10px);
-  }
 }
 
 .bounce-arrow a {
-  color: #d1d5db; /* text-gray-300 */
-  font-size: 1.5rem; /* text-2xl => 1.5rem */
+  color: #d1d5db;
+  font-size: 1.5rem;
   transition: color 0.3s ease;
   text-decoration: none;
 }
 
 .bounce-arrow a:hover {
-  color: #8b5cf6; /* text-purple-500 => #8b5cf6 */
+  color: #8b5cf6;
 }
